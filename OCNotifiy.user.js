@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         OC Notify
 // @version      0.2
-// @description  Shows when your OC is ready in the 'Travel Agency' and prevents you from flying on the day it is due.
+// @description  Shows when your OC is ready in the 'Travel Agency' and prevents you from flying when it's close.
 // @author       Pi77Bull[2082618]
 // @match        *.torn.com/travelagency.php
 // @grant        none
