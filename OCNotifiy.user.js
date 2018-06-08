@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         OC Notify
-// @version      0.2
+// @version      0.3
 // @description  Shows when your OC is ready in the 'Travel Agency' and prevents you from flying when it's close.
 // @author       Pi77Bull[2082618]
 // @match        *.torn.com/travelagency.php
@@ -47,8 +47,9 @@ function showCrime() {
                     info.text("Your organized crime is ready");
                 }
 
-                if (timeLeft / 60 < JSON.parse(localStorage.getItem("ocnotify")).travelprevent && $(".travel-agency").css("display") != "none") {
+                if (timeLeft / 60 < JSON.parse(localStorage.getItem("ocnotify")).travelprevent && $(".travel-agency").css("display") != "none" && !$(".travel-agency").attr("class").includes("travelanyway")) {
                     $(".travel-agency").css("display", "none");
+                    showTravelAnyway();
                 }
                 if (timeLeft == 0) {
                     clearInterval(timeLeftCount);
@@ -59,6 +60,17 @@ function showCrime() {
         } else {
             info.text("You're currently not participating in an organized crime");
         }
+    });
+}
+
+function showTravelAnyway() {
+    $("<div id='thugLife' style='font-size:18px; text-align:center;'><span>Your OC is (almost) ready.</span><br><span>Do you want to <span style='color:blue; cursor:pointer;'>travel anyway</span>?</span></div>").insertAfter(".travel-agency");
+
+    $("#thugLife > span > span").on("click", function () {
+        $(".travel-agency").addClass("travelanyway");
+        $(".travel-agency").css("display", "block");
+        $("#thugLife").remove();
+        $("#thugLife").remove(); //someone please tell me why this line has to be executed twice to work
     });
 }
 
