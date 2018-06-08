@@ -128,6 +128,7 @@ function getCrimes(callback) {
     $.getJSON("https://api.torn.com/faction/?selections=crimes&key=" + JSON.parse(localStorage.getItem("ocnotify")).apikey, function (data) {
         if (data.error) {
             showApiInput();
+            removeButtons();
         } else {
             callback(data.crimes);
         }
