@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         OC Notify
-// @version      0.3.1
+// @version      0.3.2
 // @description  Shows when your OC is ready in the 'Travel Agency' and prevents you from flying when it's close.
 // @author       Pi77Bull[2082618]
 // @match        *.torn.com/travelagency.php
@@ -47,8 +47,7 @@ function showCrime() {
                     info.text("Your organized crime is ready");
                 }
 
-                if (timeLeft / 60 < JSON.parse(localStorage.getItem("ocnotify")).travelprevent && $(".travel-agency").css("display") != "none" && !$(".travel-agency").attr("class").includes("travelanyway")) {
-                    $(".travel-agency").css("display", "none");
+                if ($(".travel-agency").length != 0 && timeLeft / 60 < JSON.parse(localStorage.getItem("ocnotify")).travelprevent && $(".travel-agency").css("display") != "none" && !$(".travel-agency").attr("class").includes("travelanyway")) {
                     showTravelAnyway();
                 }
                 if (timeLeft == 0) {
@@ -64,6 +63,7 @@ function showCrime() {
 }
 
 function showTravelAnyway() {
+    $(".travel-agency").css("display", "none");
     $("<div id='thugLife' style='font-size:18px; text-align:center;'><span>Your OC is (almost) ready.</span><br><span>Do you want to <span style='color:blue; cursor:pointer;'>travel anyway</span>?</span></div>").insertAfter(".travel-agency");
 
     $("#thugLife > span > span").on("click", function () {
@@ -92,6 +92,9 @@ function showButtons() {
         $(".travel-agency").css("display", "block");
         showApiInput();
         removeButtons();
+        $(".travel-agency").removeClass("travelanyway");
+        $("#thugLife").remove();
+        $("#thugLife").remove();
     });
 }
 
@@ -129,6 +132,8 @@ function getCrimes(callback) {
         if (data.error) {
             showApiInput();
             removeButtons();
+            showTravelAnyway();
+            alert(`Error Code: ${data.error.code} - ${data.error.error}`);
         } else {
             callback(data.crimes);
         }
@@ -136,9 +141,9 @@ function getCrimes(callback) {
 }
 
 function getID(apikey, callback) {
-    $.getJSON("https://api.torn.com/user/?selections=basic&key=" + apikey, function (data) {
+    $.getJSON("https://api.torn.com/user/?selections=basic&key=" + apikey, (data) => {
         if (data.error) {
-            alert("Invalid API key");
+            alert(`Error Code: ${data.error.code} - ${data.error.error}`);
         } else {
             callback(data.player_id);
         }
