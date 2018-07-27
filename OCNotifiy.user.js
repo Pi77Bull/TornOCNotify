@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         OC Notify
-// @version      0.3.2
+// @version      0.3.3
 // @description  Shows when your OC is ready in the 'Travel Agency' and prevents you from flying when it's close.
 // @author       Pi77Bull[2082618]
 // @match        *.torn.com/travelagency.php
@@ -112,15 +112,13 @@ function showApiInput() {
 
 function saveInformation() {
     let ocnotify = localStorage.getItem("ocnotify");
-    if (ocnotify) {
-        let travelprevent = JSON.parse(localStorage.getItem("ocnotify")).travelprevent;
-    }
+    let travelprevent = ocnotify ? JSON.parse(localStorage.getItem("ocnotify")).travelprevent : "1440";
 
     getID($("#ocnapikey").val(), function (playerid) {
         let obj = {
             "apikey": $('#ocnapikey').val(),
             "playerid": playerid,
-            "travelprevent": ocnotify ? (travelprevent ? travelprevent : "1440") : "1440"
+            "travelprevent": travelprevent
         };
         localStorage.setItem("ocnotify", JSON.stringify(obj));
         showCrime();
